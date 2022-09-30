@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.example.assignment.data.Data
 import com.example.assignment.databinding.ListItemBinding
 
@@ -19,7 +20,7 @@ class AspireAdapter : ListAdapter<Data, AspireAdapter.AspireViewHolder>(diffUtil
                 // TODO: apply binding
                 title.text = data.name
                 idText.text = data.id.toString()
-                imageView // TODO: load
+                imageView.load(data.url)
                 imageFileName.text = data.image
                 createdAt.text = data.created_at
                 updatedAt.text = data.updated_at
