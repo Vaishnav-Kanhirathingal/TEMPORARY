@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import com.example.assignment.api.service
 import com.example.assignment.data.Data
 import com.example.assignment.databinding.ActivityDisplayBinding
+import com.example.assignment.recycler.AspireAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -25,9 +26,12 @@ class DisplayActivity : AppCompatActivity() {
     }
 
     private fun applyBinding() {
+        val adapter = AspireAdapter()
         listScreen.observe(this) {
             // TODO: submit list
+            adapter.submitList(it)
         }
+        binding.displayRecycler.adapter = adapter
     }
 
     private fun getData() {
