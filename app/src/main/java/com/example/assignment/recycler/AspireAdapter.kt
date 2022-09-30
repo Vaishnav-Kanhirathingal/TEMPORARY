@@ -17,7 +17,6 @@ class AspireAdapter : ListAdapter<Data, AspireAdapter.AspireViewHolder>(diffUtil
 
         fun applyBinding(data: Data) {
             binding.apply {
-                // TODO: apply binding
                 title.text = data.name
                 idText.text = data.id.toString()
                 imageView.load(data.url)

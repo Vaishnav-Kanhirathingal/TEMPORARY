@@ -9,15 +9,13 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 
-private const val baseURL = "https://aspireinfotechs.in/filmdial_app/public/api/auth/"
-
-private val retrofit: Retrofit = Retrofit
-    .Builder()
-    .baseUrl(baseURL)
-    .addConverterFactory(GsonConverterFactory.create())
-    .build()
-
-val service: AspireApi by lazy { retrofit.create(AspireApi::class.java) }
+val service: AspireApi by lazy {
+    Retrofit
+        .Builder()
+        .baseUrl("https://aspireinfotechs.in/filmdial_app/public/api/auth/")
+        .addConverterFactory(GsonConverterFactory.create())
+        .build().create(AspireApi::class.java)
+}
 
 interface AspireApi {
     @POST("register")

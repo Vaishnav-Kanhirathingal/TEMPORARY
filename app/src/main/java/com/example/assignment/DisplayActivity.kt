@@ -28,7 +28,6 @@ class DisplayActivity : AppCompatActivity() {
     private fun applyBinding() {
         val adapter = AspireAdapter()
         listScreen.observe(this) {
-            // TODO: submit list
             adapter.submitList(it)
         }
         binding.displayRecycler.adapter = adapter
