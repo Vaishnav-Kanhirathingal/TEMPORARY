@@ -1,5 +1,6 @@
 package com.example.assignment
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -39,15 +40,15 @@ class MainActivity : AppCompatActivity() {
                         department_id = 2,
                         email = emailTextField.editText!!.text.toString(),
                         gender = gender!!,
-                        name =fullNameTextField.editText!!.text.toString(),
-                        phone =phoneTextField.editText!!.text.toString(),
+                        name = fullNameTextField.editText!!.text.toString(),
+                        phone = phoneTextField.editText!!.text.toString(),
                     ).let {
                         // TODO: send
                     }
                 }
             }
             nextPage.setOnClickListener {
-                // TODO: go to next page
+                startActivity(Intent(this@MainActivity, DisplayActivity::class.java))
             }
         }
     }

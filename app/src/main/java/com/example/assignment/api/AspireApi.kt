@@ -19,8 +19,8 @@ val service: AspireApi by lazy { retrofit.create(AspireApi::class.java) }
 
 interface AspireApi {
     @PUT("register")
-    fun register(userData: UserData)
+    suspend fun register(userData: UserData)
 
     @GET("get_department")
-    fun getDepartment(): ListScreen
+    suspend fun getDepartment(): ListScreen
 }
