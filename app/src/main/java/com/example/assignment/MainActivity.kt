@@ -37,26 +37,32 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             register.setOnClickListener {
-                fullNameTextField.isErrorEnabled = false
-                phoneTextField.isErrorEnabled = false
-                emailTextField.isErrorEnabled = false
-                addressTextField.isErrorEnabled = false
-
-                if (fullNameTextField.editText!!.text.toString().isEmpty()) {
-                    fullNameTextField.error = "field empty"
-                    fullNameTextField.isErrorEnabled = true
-                } else if (phoneTextField.editText!!.text.toString().isEmpty()) {
-                    phoneTextField.error = "field empty"
-                    phoneTextField.isErrorEnabled = true
-                } else if (gender.isNullOrBlank()) {
-                    Toast.makeText(this@MainActivity, "Select gender", Toast.LENGTH_SHORT).show()
-                } else if (emailTextField.editText!!.text.toString().isEmpty()) {
-                    emailTextField.error = "field empty"
-                    emailTextField.isErrorEnabled = true
-                } else if (addressTextField.editText!!.text.toString().isEmpty()) {
-                    addressTextField.error = "field empty"
-                    addressTextField.isErrorEnabled = true
-                } else {
+                fullNameTextField.apply {
+                    this.error = "field empty"
+                    this.isErrorEnabled = this.editText!!.text.toString().isNullOrEmpty()
+                }
+                phoneTextField.apply {
+                    this.error = "field empty"
+                    this.isErrorEnabled = this.editText!!.text.toString().isNullOrEmpty()
+                }
+                if (gender.isNullOrBlank()) {
+                    Toast.makeText(this@MainActivity, "select gender", Toast.LENGTH_SHORT).show()
+                }
+                emailTextField.apply {
+                    this.error = "field empty"
+                    this.isErrorEnabled = this.editText!!.text.toString().isNullOrEmpty()
+                }
+                addressTextField.apply {
+                    this.error = "field empty"
+                    this.isErrorEnabled = this.editText!!.text.toString().isNullOrEmpty()
+                }
+                if (
+                    !fullNameTextField.isErrorEnabled &&
+                    !phoneTextField.isErrorEnabled &&
+                    !emailTextField.isErrorEnabled &&
+                    !addressTextField.isErrorEnabled &&
+                    !gender.isNullOrBlank()
+                ) {
                     CoroutineScope(Dispatchers.IO).launch {
                         val call = service.register(
                             UserData(
@@ -89,6 +95,8 @@ class MainActivity : AppCompatActivity() {
                             }
                         }
                     }
+                } else {
+                    Toast.makeText(this@MainActivity, "check errors", Toast.LENGTH_SHORT).show()
                 }
             }
             nextPage.setOnClickListener {
