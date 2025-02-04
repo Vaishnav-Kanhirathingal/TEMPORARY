@@ -1,5 +1,3 @@
 <resources>
-    <string name="app_name">Assignment</string>
-    <string name="detail_fill">Feel free to fill your details</string>
-    <string name="basic_details"><b>Basic Details</b></string>
+    <string name="app_name">RAW - EG</string>
 </resources>
