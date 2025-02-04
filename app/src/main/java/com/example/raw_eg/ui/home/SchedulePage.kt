@@ -1,5 +1,6 @@
 package com.example.raw_eg.ui.home
 
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -27,8 +28,11 @@ import coil3.compose.AsyncImage
 import com.example.raw_eg.CustomSharedValues
 import com.example.raw_eg.MainViewModel
 import com.example.raw_eg.data.schedule.Schedule
+import com.example.raw_eg.data.schedule.ScheduleTeam
 
 object SchedulePage {
+    private val TAG = this::class.simpleName
+
     @OptIn(ExperimentalFoundationApi::class)
     @Composable
     fun MainScreen(
@@ -134,56 +138,73 @@ object SchedulePage {
                             horizontalArrangement = Arrangement.Center,
                             verticalAlignment = Alignment.CenterVertically,
                             content = {
-                                Column(
-                                    modifier = Modifier.weight(1f),
-                                    horizontalAlignment = Alignment.CenterHorizontally,
-                                    verticalArrangement = Arrangement.Center,
-                                    content = {
-                                        AsyncImage(
-                                            modifier = Modifier.size(size = 60.dp),
-                                            model = viewModel.teamList.find { it.teamId == schedule.visitorTeam.teamId }?.logoURL,
-                                            contentDescription = null,
-                                        )
-                                        if (isFinal) {
-                                            Text(text = schedule.visitorTeam.teamAlias)
+                                @Composable
+                                fun TeamColumn(
+                                    modifier: Modifier,
+                                    team: ScheduleTeam
+                                ) {
+                                    Column(
+                                        modifier = modifier,
+                                        horizontalAlignment = Alignment.CenterHorizontally,
+                                        verticalArrangement = Arrangement.Center,
+                                        content = {
+                                            AsyncImage(
+                                                modifier = Modifier.size(size = 60.dp),
+                                                model = viewModel.teamList
+                                                    .find { it.teamId == team.teamId }
+                                                    ?.logoURL
+                                                    .apply { Log.d(TAG, "url = $this") },
+                                                contentDescription = null,
+                                            )
+                                            if (isFinal) {
+                                                Text(text = team.teamAlias)
+                                            }
                                         }
-                                    }
+                                    )
+                                }
+
+                                @Composable
+                                fun TeamMidTitle(
+                                    modifier: Modifier,
+                                    team: ScheduleTeam
+                                ) {
+                                    Text(
+                                        modifier = modifier,
+                                        textAlign = TextAlign.Center,
+                                        text = team.let { if (isFinal) it.score else it.teamAlias }
+                                    )
+                                }
+                                //--------------------------------------------------------------left
+                                TeamColumn(
+                                    modifier = Modifier.weight(1f),
+                                    team = schedule.visitorTeam
                                 )
 
-                                Text(
+                                TeamMidTitle(
                                     modifier = Modifier.weight(1f),
-                                    textAlign = TextAlign.Center,
-                                    text = schedule.visitorTeam.let { if (isFinal) it.score else it.teamAlias })
+                                    team = schedule.visitorTeam
+                                )
+                                //---------------------------------------------------------------mid
                                 Text(
                                     modifier = Modifier.padding(horizontal = 24.dp),
                                     text = if (isFinal) "@" else "VS"
                                 )
-                                Text(
+                                //-------------------------------------------------------------right
+                                TeamMidTitle(
                                     modifier = Modifier.weight(1f),
-                                    textAlign = TextAlign.Center,
-                                    text = schedule.homeTeam.let { if (isFinal) it.score else it.teamAlias })
-
-                                Column(
-                                    modifier = Modifier.weight(1f),
-                                    horizontalAlignment = Alignment.CenterHorizontally,
-                                    verticalArrangement = Arrangement.Center,
-                                    content = {
-                                        AsyncImage(
-                                            modifier = Modifier.size(size = 60.dp),
-                                            model = viewModel.teamList.find { it.teamId == schedule.homeTeam.teamId }?.logoURL,
-                                            contentDescription = null,
-                                        )
-                                        if (isFinal) {
-                                            Text(text = schedule.homeTeam.teamAlias)
-                                        }
-                                    }
+                                    team = schedule.homeTeam
                                 )
-
+                                TeamColumn(
+                                    modifier = Modifier.weight(1f),
+                                    team = schedule.homeTeam
+                                )
                             }
                         )
                         if (!isFinal) {
                             Button(
-                                modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = 8.dp),
                                 onClick = { TODO() },
                                 content = {
                                     Text(text = "BUY TICKETS ON TICKETMASTER")
