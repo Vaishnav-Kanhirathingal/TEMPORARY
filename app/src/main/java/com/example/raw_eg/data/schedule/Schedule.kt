@@ -20,7 +20,6 @@ data class Schedule(
     val gameTimeMillis: Long get() = Instant.parse(this.gameTime).toEpochMilli()
     val zonedDateTime: ZonedDateTime get() = Instant.parse(this.gameTime).atZone(ZoneId.of("UTC"))
 
-
     fun getCardTitle(): String {
         val cityStatus = (this.arenaCity == this.homeTeam.teamCity)
             .let { if (it) "HOME" else "AWAY" }

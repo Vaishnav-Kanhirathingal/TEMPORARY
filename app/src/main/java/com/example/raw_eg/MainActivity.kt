@@ -27,6 +27,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.raw_eg.data.CustomSharedValues
 import com.example.raw_eg.ui.home.SchedulePage
 import com.example.raw_eg.ui.theme.RAWEGTheme
 import dagger.hilt.android.AndroidEntryPoint

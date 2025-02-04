@@ -1,4 +1,4 @@
-package com.example.raw_eg
+package com.example.raw_eg.data
 
 import androidx.compose.ui.unit.dp
 

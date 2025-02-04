@@ -31,8 +31,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
-import com.example.raw_eg.CustomSharedValues
 import com.example.raw_eg.MainViewModel
+import com.example.raw_eg.data.CustomSharedValues
 import com.example.raw_eg.data.schedule.Schedule
 import com.example.raw_eg.data.schedule.ScheduleTeam
 
