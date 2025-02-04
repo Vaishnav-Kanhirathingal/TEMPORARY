@@ -15,6 +15,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import java.io.BufferedReader
 import java.io.InputStreamReader
+import java.time.ZonedDateTime
 import javax.inject.Inject
 import javax.inject.Named
 import javax.inject.Singleton
@@ -26,6 +27,12 @@ class MainViewModel @Inject constructor(
 ) : ViewModel() {
     private val TAG = this::class.simpleName
 
+    fun getMonthPartitionedScheduleList(): List<List<Schedule>> {
+        return this.scheduleList
+            .groupBy { it.zonedDateTime.let { zdt: ZonedDateTime -> "${zdt.month.value} - ${zdt.year}" } }
+            .map { it.value.reversed() }
+            .sortedBy { it.first().gameTimeMillis }
+    }
 }
 
 @Module
