@@ -1,7 +1,6 @@
 package com.example.raw_eg
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.raw_eg.data.schedule.Schedule
 import com.example.raw_eg.data.teams.Team
@@ -27,20 +26,6 @@ class MainViewModel @Inject constructor(
 ) : ViewModel() {
     private val TAG = this::class.simpleName
 
-//    init {
-//        Log.d(
-//            TAG, "sch = " +
-//                    scheduleList.take(n = 10).joinToString(
-//                        separator = ", ",
-//                        transform = { it.year.toString() }
-//                    )
-//                    + "\n\n\n" +
-//                    teamList.take(n = 10).joinToString(
-//                        separator = ", ",
-//                        transform = { it.year }
-//                    )
-//        )
-//    }
 }
 
 @Module
