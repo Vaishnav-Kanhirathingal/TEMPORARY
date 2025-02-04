@@ -12,18 +12,19 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
@@ -37,6 +38,7 @@ import com.example.raw_eg.MainViewModel
 import com.example.raw_eg.data.CustomSharedValues
 import com.example.raw_eg.data.schedule.Schedule
 import com.example.raw_eg.data.schedule.ScheduleTeam
+import kotlinx.coroutines.launch
 
 object SchedulePage {
     private val TAG = this::class.simpleName
@@ -47,16 +49,32 @@ object SchedulePage {
         modifier: Modifier,
         viewModel: MainViewModel
     ) {
+        val scope = rememberCoroutineScope()
+        val state = rememberLazyListState()
         LazyColumn(
             modifier = modifier,
+            state = state,
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(space = 24.dp),
             content = {
-                viewModel.getMonthPartitionedScheduleList().forEach { partition ->
+                val partitionedList = viewModel.getMonthPartitionedScheduleList()
+                partitionedList.forEachIndexed { index, partition ->
+                    fun moveToParentIndex(parentIndex: Int) {
+                        if (parentIndex in partitionedList.indices) {
+                            var final = parentIndex
+                            partitionedList.take(parentIndex).forEach {
+                                final += it.size
+                            }
+                            Log.d(TAG, "final = $final")
+                            scope.launch { state.scrollToItem(index = final) }
+                        }
+                    }
                     stickyHeader {
                         StickyHeader(
                             modifier = Modifier.fillMaxWidth(),
-                            text = partition.first().zonedDateTime.let { "${it.month.name.uppercase()} ${it.year}" }
+                            text = partition.first().zonedDateTime.let { "${it.month.name.uppercase()} ${it.year}" },
+                            toNext = { moveToParentIndex(parentIndex = index + 1) },
+                            toPrevious = { moveToParentIndex(parentIndex = index - 1) }
                         )
                     }
                     items(
@@ -78,7 +96,9 @@ object SchedulePage {
     @Composable
     private fun StickyHeader(
         modifier: Modifier,
-        text: String
+        text: String,
+        toNext: () -> Unit,
+        toPrevious: () -> Unit
     ) {
         Row(
             modifier = modifier.background(color = MaterialTheme.colorScheme.surfaceContainer),
@@ -91,7 +111,7 @@ object SchedulePage {
                             minWidth = CustomSharedValues.Dims.minimumTouchSize,
                             minHeight = CustomSharedValues.Dims.minimumTouchSize
                         ),
-                    onClick = { TODO() },
+                    onClick = toPrevious,
                     content = {
                         Icon(
                             modifier = Modifier,
@@ -107,7 +127,7 @@ object SchedulePage {
                             minWidth = CustomSharedValues.Dims.minimumTouchSize,
                             minHeight = CustomSharedValues.Dims.minimumTouchSize
                         ),
-                    onClick = { TODO() },
+                    onClick = toNext,
                     content = {
                         Icon(
                             modifier = Modifier,
