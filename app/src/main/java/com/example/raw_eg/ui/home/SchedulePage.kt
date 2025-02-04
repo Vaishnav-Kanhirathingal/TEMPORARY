@@ -26,27 +26,18 @@ object SchedulePage {
                     return this.zonedDateTime.let { "${it.month.value} - ${it.year}" }
                 }
 
-                val partitionedScheduleList =
-                    viewModel.scheduleList.groupBy { it.getMonthYearCombo() }
+                val partitionedScheduleList = viewModel.scheduleList
+                    .groupBy { it.getMonthYearCombo() }
+                    .map { it.value.reversed() }
+                    .sortedBy { it.first().gameTimeMillis }
 
-//                val partitioned = viewModel.scheduleList.partition {
-//                    val newMonthYearCombo = it.getMonthYearCombo()
-//                    (monthYearCombo != newMonthYearCombo).let {
-//                        if (it) {
-//                            monthYearCombo = newMonthYearCombo
-//                            true
-//                        } else {
-//                            false
-//                        }
-//                    }
-//                }
 
                 partitionedScheduleList.forEach { partition ->
                     stickyHeader {
-                        Text(text = partition.value.first().zonedDateTime.month.name)
+                        Text(text = partition.first().zonedDateTime.month.name)
                     }
                     items(
-                        items = partition.value,
+                        items = partition,
                         key = { schedule: Schedule -> schedule.uid },
                         itemContent = { schedule ->
                             Text(text = schedule.gameTime)
