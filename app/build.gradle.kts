@@ -63,7 +63,13 @@ dependencies {
     implementation("com.google.dagger:hilt-android:2.51.1")
     ksp("com.google.dagger:hilt-android-compiler:2.51.1")
     //------------------------------------------------------------------------------constraintlayout
-    implementation ("androidx.constraintlayout:constraintlayout-compose:1.0.1")
+    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
     //------------------------------------------------------------------------------------------coil
-    implementation("io.coil-kt.coil3:coil-compose:3.0.4")
+    implementation("io.coil-kt.coil3:coil-compose:3.0.0")
+    //------------------------------------------------------------------------------------------ktor
+    val ktor_version = "3.0.3"
+    implementation("io.ktor:ktor-client-core:$ktor_version")
+    implementation("io.ktor:ktor-client-cio:$ktor_version")
+    //-----------------------------------------------------------------------------------------glide
+    implementation("com.github.bumptech.glide:compose:1.0.0-beta01")
 }

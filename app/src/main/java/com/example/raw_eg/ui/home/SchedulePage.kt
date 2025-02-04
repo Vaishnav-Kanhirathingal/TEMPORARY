@@ -2,6 +2,7 @@ package com.example.raw_eg.ui.home
 
 import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,13 +19,18 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import coil3.compose.AsyncImage
+import androidx.compose.ui.unit.sp
+import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.bumptech.glide.integration.compose.GlideImage
 import com.example.raw_eg.CustomSharedValues
 import com.example.raw_eg.MainViewModel
 import com.example.raw_eg.data.schedule.Schedule
@@ -73,7 +79,7 @@ object SchedulePage {
         text: String
     ) {
         Row(
-            modifier = modifier,
+            modifier = modifier.background(color = MaterialTheme.colorScheme.surfaceContainer),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center,
             content = {
@@ -112,6 +118,7 @@ object SchedulePage {
         )
     }
 
+    @OptIn(ExperimentalGlideComposeApi::class)
     @Composable
     private fun ScheduleItem(
         modifier: Modifier,
@@ -119,12 +126,12 @@ object SchedulePage {
         schedule: Schedule,
     ) {
         Card(
-            modifier = modifier,
+            modifier = modifier.padding(horizontal = 16.dp),
             content = {
                 val isFinal = (schedule.statusTime == "Final")
 
                 Column(
-                    modifier = Modifier.padding(all = 16.dp),
+                    modifier = Modifier.padding(vertical = 16.dp, horizontal = 24.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center,
                     content = {
@@ -148,8 +155,8 @@ object SchedulePage {
                                         horizontalAlignment = Alignment.CenterHorizontally,
                                         verticalArrangement = Arrangement.Center,
                                         content = {
-                                            AsyncImage(
-                                                modifier = Modifier.size(size = 60.dp),
+                                            GlideImage(
+                                                modifier = Modifier.size(size = 100.dp),
                                                 model = viewModel.teamList
                                                     .find { it.teamId == team.teamId }
                                                     ?.logoURL
@@ -157,7 +164,11 @@ object SchedulePage {
                                                 contentDescription = null,
                                             )
                                             if (isFinal) {
-                                                Text(text = team.teamAlias)
+                                                Text(
+                                                    style = TextStyle(fontWeight = FontWeight.Bold),
+                                                    fontSize = 24.sp,
+                                                    text = team.teamAlias
+                                                )
                                             }
                                         }
                                     )
@@ -170,6 +181,8 @@ object SchedulePage {
                                 ) {
                                     Text(
                                         modifier = modifier,
+                                        style = TextStyle(fontWeight = if (isFinal) FontWeight.SemiBold else FontWeight.Bold),
+                                        fontSize = 28.sp,
                                         textAlign = TextAlign.Center,
                                         text = team.let { if (isFinal) it.score else it.teamAlias }
                                     )
@@ -187,6 +200,8 @@ object SchedulePage {
                                 //---------------------------------------------------------------mid
                                 Text(
                                     modifier = Modifier.padding(horizontal = 24.dp),
+                                    style = TextStyle(fontWeight = FontWeight.Medium),
+                                    fontSize = 20.sp,
                                     text = if (isFinal) "@" else "VS"
                                 )
                                 //-------------------------------------------------------------right
