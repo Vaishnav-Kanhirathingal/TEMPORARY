@@ -4,25 +4,29 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.raw_eg.ui.home.SchedulePage
 import com.example.raw_eg.ui.theme.RAWEGTheme
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,10 +47,12 @@ class MainActivity : ComponentActivity() {
     }
 
     companion object {
+        @OptIn(ExperimentalFoundationApi::class)
         @Composable
         fun MainScreen(
             modifier: Modifier
         ) {
+            val pagerState = rememberPagerState(initialPage = 0, pageCount = { 2 })
             Column(
                 modifier = modifier,
                 content = {
@@ -59,18 +65,18 @@ class MainActivity : ComponentActivity() {
                         textAlign = TextAlign.Center,
 
                         )
-                    val tabSelected = remember { mutableStateOf(HomeTabSelections.SCHEDULE) }
+                    val scope = rememberCoroutineScope()
                     TabRow(
                         modifier = Modifier,
-                        selectedTabIndex = tabSelected.value.ordinal,
+                        selectedTabIndex = pagerState.currentPage,
                         tabs = {
                             HomeTabSelections.entries.forEach {
                                 Tab(
                                     modifier = Modifier
                                         .heightIn(min = CustomSharedValues.Dims.minimumTouchSize)
                                         .align(alignment = Alignment.CenterHorizontally),
-                                    selected = tabSelected.value == it,
-                                    onClick = { tabSelected.value = it },
+                                    selected = pagerState.currentPage == it.ordinal,
+                                    onClick = { scope.launch { pagerState.scrollToPage(page = it.ordinal) } },
                                     content = {
                                         Text(
                                             modifier = Modifier,
@@ -78,6 +84,25 @@ class MainActivity : ComponentActivity() {
                                             text = it.displayText
                                         )
                                     }
+                                )
+                            }
+                        }
+                    )
+
+                    HorizontalPager(
+                        state = pagerState,
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxWidth(),
+                        pageContent = { pageIndex: Int ->
+                            when (pageIndex) {
+                                0 -> SchedulePage.MainScreen(
+                                    modifier = Modifier.fillMaxSize()
+                                )
+
+                                1 -> Text(
+                                    modifier = Modifier.fillMaxSize(),
+                                    text = "Games page"
                                 )
                             }
                         }
