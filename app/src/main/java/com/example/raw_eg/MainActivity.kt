@@ -4,7 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.activity.viewModels
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -26,9 +27,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.raw_eg.ui.home.SchedulePage
 import com.example.raw_eg.ui.theme.RAWEGTheme
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    private val viewModel: MainViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -38,7 +43,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     content = { innerPadding ->
                         MainScreen(
-                            modifier = Modifier.padding(paddingValues = innerPadding)
+                            modifier = Modifier.padding(paddingValues = innerPadding),
+                            viewModel = viewModel
                         )
                     }
                 )
@@ -47,10 +53,10 @@ class MainActivity : ComponentActivity() {
     }
 
     companion object {
-        @OptIn(ExperimentalFoundationApi::class)
         @Composable
         fun MainScreen(
-            modifier: Modifier
+            modifier: Modifier,
+            viewModel: MainViewModel
         ) {
             val pagerState = rememberPagerState(initialPage = 0, pageCount = { 2 })
             Column(
@@ -97,12 +103,20 @@ class MainActivity : ComponentActivity() {
                         pageContent = { pageIndex: Int ->
                             when (pageIndex) {
                                 0 -> SchedulePage.MainScreen(
-                                    modifier = Modifier.fillMaxSize()
+                                    modifier = Modifier.fillMaxSize(),
+                                    viewModel = viewModel
                                 )
 
-                                1 -> Text(
+                                1 -> Box(
                                     modifier = Modifier.fillMaxSize(),
-                                    text = "Games page"
+                                    contentAlignment = Alignment.Center,
+                                    content = {
+                                        Text(
+                                            modifier = Modifier.fillMaxWidth(),
+                                            textAlign = TextAlign.Center,
+                                            text = "Games page"
+                                        )
+                                    }
                                 )
                             }
                         }
@@ -122,5 +136,11 @@ enum class HomeTabSelections {
 @Preview
 @Composable
 private fun MainScreenPrev() {
-    MainActivity.MainScreen(modifier = Modifier.fillMaxSize())
+    MainActivity.MainScreen(
+        modifier = Modifier.fillMaxSize(),
+        viewModel = MainViewModel(
+            scheduleList = listOf(),
+            teamList = listOf()
+        )
+    )
 }
