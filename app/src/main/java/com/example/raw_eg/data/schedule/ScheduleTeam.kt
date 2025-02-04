@@ -4,10 +4,10 @@ import com.google.gson.annotations.SerializedName
 
 data class ScheduleTeam(
     @SerializedName("tid") val teamId: String,
-    @SerializedName("re") val re: String,
-    @SerializedName("ta") val ta: String,
-    @SerializedName("tn") val tn: String,
-    @SerializedName("tc") val tc: String,
-    @SerializedName("s") val s: String,
-    @SerializedName("ist_group") val ist_group: String,
+    @SerializedName("re") val records: String,
+    @SerializedName("ta") val teamAlias: String,
+    @SerializedName("tn") val teamName: String,
+    @SerializedName("tc") val teamCity: String,
+    @SerializedName("s") val score: String,
+    @SerializedName("ist_group") val istGroup: String,
 )

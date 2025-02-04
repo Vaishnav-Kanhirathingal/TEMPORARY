@@ -62,4 +62,8 @@ dependencies {
     //----------------------------------------------------------------------------------------dagger
     implementation("com.google.dagger:hilt-android:2.51.1")
     ksp("com.google.dagger:hilt-android-compiler:2.51.1")
+    //------------------------------------------------------------------------------constraintlayout
+    implementation ("androidx.constraintlayout:constraintlayout-compose:1.0.1")
+    //------------------------------------------------------------------------------------------coil
+    implementation("io.coil-kt.coil3:coil-compose:3.0.4")
 }
