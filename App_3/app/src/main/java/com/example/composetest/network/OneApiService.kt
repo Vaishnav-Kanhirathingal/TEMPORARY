@@ -1,6 +1,6 @@
 package com.example.composetest.network
 
-import com.google.gson.JsonObject
+import com.example.composetest.data.Weather
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
@@ -23,9 +23,9 @@ interface OneApiService {
     }
 
     @GET("weathers/")
-    suspend fun getWeatherList(): List<JsonObject>
+    suspend fun getWeatherList(): List<Weather>
 
     @GET("weathers/{id}/")
-    suspend fun getWeather(@Path("id") id: Int): JsonObject
+    suspend fun getWeather(@Path("id") id: Int): Weather
 
 }
